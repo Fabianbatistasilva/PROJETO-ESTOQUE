@@ -1,0 +1,125 @@
+{% extends 'base.html'%}
+{% load static%}
+{%block 'titulo'%}
+Relatório {{produto.produto}}
+{%endblock%}
+
+{%block 'conteudo'%}
+    {% include 'parciais/_messages.html'%}
+    <div class="row">
+      <div class="mb-3 col-9">
+        <label class="form-label">Produto: </label>
+        <input type="text" class="form-control" name="produto" placeholder="Nome do produto" value="{{produto.produto}}" disabled>
+      </div>
+
+      <div class="mb-3 col-3">
+        <label class="form-label">Estoque: </label>
+        <input type="text" class="form-control" name="estoque" placeholder="Nome do produto" value="{{produto.estoque}}" disabled>
+      </div>
+    </div>
+    
+    <div class="row">
+      <div class="mb-3 col-md-3">
+        <label class="form-label">Preço de venda: </label>
+        <input type="text" class="form-control" name="preco_venda" value="R$ {{produto.preco_venda}}" disabled>
+      </div>
+      {% if produto.preco_ultima_compra %}
+      <div class="mb-3 col-md-3">
+        <label class="form-label">Preço da última compra: </label>
+        <input type="text" class="form-control" name="preco_compra" value="R$ {{produto.preco_ultima_compra}}" disabled>
+      </div>
+      {% else %}
+      <div class="mb-3 col-md-3">
+        <label class="form-label">Preço da última compra: </label>
+        <input type="text" class="form-control" name="preco_compra" value="Nenhuma compra efetuada ainda" disabled>
+      </div>
+      {% endif %}
+      {% if produto.data_ultima_compra %}
+      <div class="mb-3 col-md-3">
+        <label class="form-label">Data da última compra: </label>
+        <input type="text" class="form-control" name="data_compra" value="{{produto.data_ultima_compra}}" disabled>
+      </div>
+      {% else %}
+      <div class="mb-3 col-md-3">
+        <label class="form-label">Data da última compra: </label>
+        <input type="text" class="form-control" name="data_compra" value="Nenhuma compra efetuada ainda" disabled>
+      </div>
+      {% endif %}
+
+      {% if produto.data_ultima_venda %}
+      <div class="mb-3 col-md-3">
+        <label class="form-label">Data da última venda: </label>
+        <input type="text" class="form-control" name="data_compra" value="{{produto.data_ultima_venda}}" disabled>
+      </div>
+      {% else %}
+      <div class="mb-3 col-md-3">
+        <label class="form-label">Data da última venda: </label>
+        <input type="text" class="form-control" name="data_compra" value="Nenhuma venda efetuada ainda" disabled>
+      </div>
+      {% endif %}
+    </div>
+
+    <h1 class="text-center text-secondary">Histórico de movimentação</h1>
+
+    <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Data</th>
+            <th scope="col">Tipo</th>
+            <th scope="col">Operação</th>
+            <th scope="col">Quantidade</th>
+            <th scope="col">Preço</th>
+            <th scope="col" class="text-end fs-3">Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+        
+          {% for h, c in teste%}
+          {% if h.movimentacao.entrada %}
+          <tr class="text-primary">
+            
+              <td>{{h.data}}</td>
+              <td>Entrada</td>
+              <td>{{h.movimentacao}}</td>
+              <td>{{h.quantidade}}</td>
+              <td>R$ {{h.preco}}</td>
+              <td class="text-end"><strong>R$ {{c}}</strong></td>
+            
+          </tr>
+          {% else %}
+          <tr class="text-danger">
+              <td>{{h.data}}</td>
+              <td>Saída</td>
+              <td>{{h.movimentacao}}</td>
+              <td>- {{h.quantidade}}</td>
+              <td>- R$ {{h.preco}}</td>
+              <td class="text-end"><strong>- R$ {{c}}</strong></td>
+          </tr>
+          {% endif %}
+          {%endfor%}
+        </tbody>
+      </table>
+
+      <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+          {%if historico.has_previous%}
+          <li class="page-item">
+            <a class="page-link" href="?p={{historico.previous_page_number}}">Anterior</a>
+          </li>
+          {%endif%}
+          {%for pagina in historico.paginator.page_range%}
+          {%if historico.number == pagina%}
+            <li class="page-item active"><a class="page-link bg-success" href="?p={{pagina}}">{{pagina}}</a></li>
+          {% else %}
+            <li class="page-item"><a class="page-link" href="?p={{pagina}}">{{pagina}}</a></li>
+          {%endif%}
+          {%endfor%}
+          {%if historico.has_next%}
+          <li class="page-item">
+            <a class="page-link" href="?p={{historico.next_page_number}}">Próxima</a>
+          </li>
+          {%endif%}
+        </ul>
+      </nav>
+{%endblock%}

@@ -1,0 +1,72 @@
+{% extends 'base.html'%}
+
+{%block 'titulo'%}
+Entradas no estoque
+{%endblock%}
+
+{%block 'conteudo'%}
+    {% include 'parciais/_messages.html'%}
+    <h1>Entradas no estoque</h1>
+    <form method="post" action="{% url 'entradas' produto.id%}">
+      {% csrf_token %}
+      <div class="mb-3">
+        <label class="form-label">Tipo de movimentação: </label>
+        <select name="mov" class="form-control">
+          {% for c in t_entrada%}
+          <option value="{{c.id}}">{{c.tipo_movimento}}</option>
+          {%endfor%}
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Produto: </label>
+        <input type="text" class="form-control" name="produto" placeholder="Nome do produto" value="{{produto.produto}}" disabled>
+      </div>
+      <div class="row">
+        <div class="mb-3 col-md-3">
+          <label class="form-label">Preço de venda: </label>
+          <input type="text" class="form-control" name="preco_venda" value="R$ {{produto.preco_venda}}" disabled>
+        </div>
+        {% if produto.preco_ultima_compra %}
+        <div class="mb-3 col-md-3">
+          <label class="form-label">Preço da última compra: </label>
+          <input type="text" class="form-control" name="preco_compra" value="R$ {{produto.preco_ultima_compra}}" disabled>
+        </div>
+        {% else %}
+        <div class="mb-3 col-md-3">
+          <label class="form-label">Preço da última compra: </label>
+          <input type="text" class="form-control" name="preco_compra" value="Nenhuma compra efetuada ainda" disabled>
+        </div>
+        {% endif %}
+        {% if produto.data_ultima_compra %}
+        <div class="mb-3 col-md-3">
+          <label class="form-label">Data da última compra: </label>
+          <input type="text" class="form-control" name="data_compra" value="{{produto.data_ultima_compra}}" disabled>
+        </div>
+        {% else %}
+        <div class="mb-3 col-md-3">
+          <label class="form-label">Data da última compra: </label>
+          <input type="text" class="form-control" name="data_compra" value="Nenhuma compra efetuada ainda" disabled>
+        </div>
+        {% endif %}
+      </div>
+      
+      <div class="row">
+        <div class="mb-3 col-md-3">
+          <label class="form-label">Preço de compra: </label>
+          <input type="number" class="form-control" name="preco" placeholder="Preço de compra" value="{{request.POST.preco}}" step="0.01">
+        </div>
+        <div class="mb-3 col-md-3">
+          <label class="form-label">Quantidade: </label>
+          <input type="number" class="form-control" name="quantidade" placeholder="Quantidade de compra" value="{{request.POST.quantidade}}" step="1">
+        </div>
+        <div class="mb-3 col-md-3">
+          <label class="form-label">Data: </label>
+          <input type="date" class="form-control" name="data" placeholder="Data da movimentação" value="{{hoje}}">
+        </div>
+      </div>
+      
+      <button type="submit" class="btn btn-primary">Confirmar movimentação</button>
+    </form>
+    
+{%endblock%}

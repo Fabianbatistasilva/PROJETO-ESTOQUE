@@ -1,0 +1,32 @@
+{% extends 'base_login.html' %}
+{% load static%}
+{% block 'titulo' %}
+Página de Login
+{% endblock %}
+
+{% block 'conteudo' %}
+<h1 style="padding-top: 20px;" class="text-center">Faça seu login</h1>
+{% include 'parciais/_messages.html'%}
+
+<div class="row">
+    <div class="col-3"></div>
+        <div class="col-md-5">
+            <form method="post" class="mb-5">
+                {% csrf_token %}
+                <div class="mb-3">
+                  <label class="form-label">Usuário</label>
+                  <input type="text" class="form-control" placeholder="Usuário" name="usuario" value="{{request.POST.usuario}}">
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Senha</label>
+                  <input type="password" class="form-control" placeholder="Senha" name="senha">
+                </div>
+                <button type="submit" class="btn btn-primary">Login</button>
+                
+              </form>
+              <br><br><br><br><br><br><br><br><br>
+        </div>
+    <div class="col-3"></div>
+</div>
+
+{% endblock %}

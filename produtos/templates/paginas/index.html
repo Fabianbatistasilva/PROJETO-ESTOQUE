@@ -1,0 +1,62 @@
+{% extends 'base.html'%}
+{% load static%}
+{%block 'titulo'%}
+Home
+{%endblock%}
+
+{%block 'conteudo'%}
+    {% include 'parciais/_messages.html'%}
+    
+    <a href="{% url 'adicionar_produto'%}" class="btn btn-primary text-light my-4">Adicionar produto  <span class="fs-4 px-2">+</span></a>
+    <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Produto</th>
+            <th scope="col">Categoria</th>
+            <th scope="col">Em estoque</th>
+            <th scope="col">Preço venda</th>
+            <th scope="col">Preço custo</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for p in produtos%}
+          <tr>
+              <td><a href="{% url 'detalhes' p.id %}">{{p.id}}</a></td>
+              <td><a href="{% url 'detalhes' p.id %}">{{p.produto}}</a></td>
+              <td>{{p.categoria}}</td>
+              <td>{{p.estoque}}</td>
+              <td>R$ {{p.preco_venda}}</td>
+              {%if p.preco_ultima_compra%}
+              <td>R$ {{p.preco_ultima_compra}}</td>
+              {% else %}
+              <td>Nenhuma compra realizada</td>
+              {% endif %}
+              <td><a href="{% url 'relatorio' p.id %}" class="btn btn-info">Relatório</a></td>
+          </tr>
+          {%endfor%}
+        </tbody>
+      </table>
+
+      <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+          {%if produtos.has_previous%}
+          <li class="page-item">
+            <a class="page-link" href="?p={{produtos.previous_page_number}}">Anterior</a>
+          </li>
+          {%endif%}
+          {%for pagina in produtos.paginator.page_range%}
+          {%if produtos.number == pagina%}
+            <li class="page-item active"><a class="page-link bg-success" href="?p={{pagina}}">{{pagina}}</a></li>
+          {% else %}
+            <li class="page-item"><a class="page-link" href="?p={{pagina}}">{{pagina}}</a></li>
+          {%endif%}
+          {%endfor%}
+          {%if produtos.has_next%}
+          <li class="page-item">
+            <a class="page-link" href="?p={{produtos.next_page_number}}">Próxima</a>
+          </li>
+          {%endif%}
+        </ul>
+      </nav>
+{%endblock%}

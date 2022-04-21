@@ -1,0 +1,49 @@
+{% extends 'base.html'%}
+
+{%block 'titulo'%}
+Cadastro de produtos
+{%endblock%}
+
+{%block 'conteudo'%}
+    {% include 'parciais/_messages.html'%}
+    <h1>Cadastro de produtos</h1>
+    <form method="post" action="{% url 'adicionar_produto' %}" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="mb-3">
+        <label class="form-label">Produto: </label>
+        <input type="text" class="form-control" name="produto" placeholder="Nome do produto" value="{{request.POST.produto}}">
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Preço de venda: </label>
+        <input type="number" class="form-control" name="preco" placeholder="Preço de venda" value="{{request.POST.preco}}" step="0.01">
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Informações detalhadas do produto (opcional): </label>
+        <textarea name="informacoes" class="form-control" cols="30" rows="10">{{request.POST.informacoes}}</textarea>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Categoria: </label>
+        <select name="categorias" class="form-control">
+          {% for c in categorias%}
+          <option value="{{c.id}}">{{c.categoria}}</option>
+          {%endfor%}
+        </select>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Unidade de medida: </label>
+        <select name="medidas" class="form-control">
+          {% for m in medidas%}
+          <option value="{{m.id}}">{{m.descricao}}</option>
+          {%endfor%}
+        </select>
+      </div>
+
+
+      <div class="mb-3">
+        <label class="form-label">Foto: </label>
+        <input type="file" name="foto" accept="image/*" id="id_foto" class="form-control">
+      </div>
+      <button type="submit" class="btn btn-primary">Adicionar produto</button>
+    </form>
+    
+{%endblock%}

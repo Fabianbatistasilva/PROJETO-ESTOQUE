@@ -1,0 +1,67 @@
+{% extends 'base.html'%}
+{% load static%}
+{%block 'titulo'%}
+{{produto.produto}}
+{%endblock%}
+
+{%block 'conteudo'%}
+    {% include 'parciais/_messages.html'%}
+    <div class="row">
+      <div class="col"></div>
+
+      <div style="margin: 0 auto;" class="col-10">
+        <div class="card mb-3" style="max-width: 800px;">
+          <div class="row">
+            <div class="col-md-4">
+              {% if produto.foto %}
+              <img src="{{produto.foto.url}}" class="img-fluid rounded-start" alt="..." style="width: 80%;">
+              {% else %}
+              <img src="{% static 'img/sem_foto1.jpeg' %}" class="img-fluid rounded-start" alt="..." style="width: 80%;">
+              {% endif %}
+            </div>
+            <div class="col-md-8">
+              <div class="card-body">
+                <h5 class="card-title">{{produto.produto}}</h5>
+                <p class="card-text">Categoria: {{produto.categoria}}</p>
+                <p class="card-text">Quantidade em estoque: {{produto.estoque}}</p>
+                <p class="card-text">Unidade de medida: {{produto.medida}}</p>
+                <p class="card-text">{{produto.informacoes}}</p>
+                <p class="card-text"><small class="text-muted">Preço de venda: R$ {{produto.preco_venda}}</small></p>
+                {% if produto.data_ultima_compra %}
+                <p class="card-text"><small class="text-muted">Data da última compra: {{produto.data_ultima_compra}}</small></p>
+                {% else %}
+                <p class="card-text"><small class="text-muted">Data da última compra: Compra ainda não realizada</small></p>
+                {% endif %}
+                {% if produto.preco_ultima_compra %}
+                <p class="card-text"><small class="text-muted">Preço da última compra: R$ {{produto.preco_ultima_compra}}</small></p>
+                {% else %}
+                <p class="card-text"><small class="text-muted">Preço da última compra: Compra ainda não realizada</small></p>
+                {% endif %}
+                {% if produto.data_ultima_venda %}
+                <p class="card-text"><small class="text-muted">Data da última venda: {{produto.data_ultima_venda}}</small></p>
+                {% else %}
+                <p class="card-text"><small class="text-muted">Data da última venda: Venda ainda não realizada</small></p>
+                {% endif %}
+                <a href="{% url 'entradas' produto.id%}" class="btn btn-success my-3" style="width: 230px;">Lançar entradas (compras)</a>
+                {% if produto.estoque > 0 %}
+                <a href="{% url 'saidas' produto.id%}" class="btn btn-success my-3" style="width: 230px;">Lançar saídas (vendas)</a>
+                {% else %}
+                <a href="" class="btn btn-success disabled my-3" style="width: 230px;">Lançar saídas (vendas)</a>
+                {% endif %}
+                <a href="{% url 'alterar' produto.id%}" class="btn btn-warning my-3" style="width: 230px;">Alterar produto</a>
+                {% if produto.estoque > 0%}
+                <a href="" class="btn btn-danger my-3 disabled" style="width: 230px;">Desativar produto</a>
+                {% else %}
+                <a href="{% url 'desligar' produto.id%}" class="btn btn-danger my-3" style="width: 230px;">Desativar produto</a>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+
+      <div class="col"></div>
+    </div>
+    
+    
+{%endblock%}

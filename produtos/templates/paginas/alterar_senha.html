@@ -1,0 +1,30 @@
+{% extends 'base_login.html' %}
+{% load static%}
+{% block 'titulo' %}
+Página de Login
+{% endblock %}
+
+{% block 'conteudo' %}
+<h1 style="padding-top: 20px;" class="text-center">Alteração de senha</h1>
+{% include 'parciais/_messages.html'%}
+
+<div class="row">
+    <div class="col-3"></div>
+        <div class="col-md-5">
+        
+        <form method="post">
+          {% csrf_token %}
+          <table class="table">
+            {{form_senha}}
+          </table>
+
+          <div class="form-group">
+            <input type="submit" value="Alterar" class="btn btn-primary">
+          </div>
+        </form>
+              <br><br><br><br><br><br><br><br><br>
+        </div>
+    <div class="col-3"></div>
+</div>
+
+{% endblock %}

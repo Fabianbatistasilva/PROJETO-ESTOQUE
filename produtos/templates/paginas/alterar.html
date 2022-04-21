@@ -1,0 +1,60 @@
+{% extends 'base.html'%}
+
+{%block 'titulo'%}
+Alteração de produtos
+{%endblock%}
+
+{%block 'conteudo'%}
+    {% include 'parciais/_messages.html'%}
+    <h1>Alteração de produtos</h1>
+    <form method="post" action="{% url 'alterar' produto.id%}" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="mb-3">
+        <label class="form-label">Produto: </label>
+        <input type="text" class="form-control" name="produto" placeholder="Nome do produto" value="{{produto.produto}}">
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Preço de venda: </label>
+        <input type="number" class="form-control" name="preco" placeholder="Preço de venda" value="{{produto.preco_venda}}" step="0.01">
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Informações detalhadas do produto (opcional): </label>
+        <textarea name="informacoes" class="form-control" cols="30" rows="10">{{produto.informacoes}}</textarea>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Categoria: </label>
+        <select name="categorias" class="form-control">
+          {% for c in categorias%}
+          {% if produto.categoria == c%}
+          <option selected value="{{c.id}}">{{c.categoria}}</option>
+          {% else %}
+          <option value="{{c.id}}">{{c.categoria}}</option>
+          {% endif %}
+          {%endfor%}
+        </select>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Unidade de medida: </label>
+        <select name="medidas" class="form-control">
+          {% for m in medidas%}
+          {% if produto.medida == m%}
+          <option selected value="{{m.id}}">{{m.descricao}}</option>
+          {% else %}
+          <option value="{{m.id}}">{{m.descricao}}</option>
+          {% endif %}
+          {%endfor%}
+        </select>
+      </div>
+
+
+      <div class="mb-3">
+        <div>
+          {{produto.foto.url}}
+        </div>
+        <label class="form-label">Foto: </label>
+        <input type="file" name="foto" accept="image/*" id="id_foto" value="{{produto.foto.url}}" class="form-control">
+      </div>
+      <button type="submit" class="btn btn-primary">Alterar produto</button>
+    </form>
+    
+{%endblock%}
