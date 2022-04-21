@@ -6,6 +6,8 @@ from .models import Categoria, Historico, Medidas, Movimento, Produto
 from django.utils import timezone
 from datetime import datetime
 from django.core.paginator import Paginator
+from django.db.models import Count
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 
 def login(request):
@@ -29,6 +31,7 @@ def logout(request):
     messages.add_message(request, messages.SUCCESS, 'Logout feito com sucesso')
     return redirect('login')
 
+@login_required(login_url='login')
 def alterar_senha(request):
     if request.method == "POST":
         form_senha = PasswordChangeForm(request.user, request.POST)
@@ -42,7 +45,7 @@ def alterar_senha(request):
     return render(request, 'paginas/alterar_senha.html', {'form_senha': form_senha})
 
 
-
+@login_required(login_url='login')
 def index(request):
     produtos = Produto.objects.all().filter(
         ativo=True
@@ -52,6 +55,7 @@ def index(request):
     produtos = paginator.get_page(page)
     return render(request, 'paginas/index.html', {'produtos':produtos})
 
+@login_required(login_url='login')
 def adicionar_produto(request):
     categorias = Categoria.objects.all()
     medidas = Medidas.objects.all()
@@ -75,11 +79,12 @@ def adicionar_produto(request):
             messages.add_message(request, messages.SUCCESS, 'Produto cadastrado com sucesso.')
             return redirect('home')
 
-
+@login_required(login_url='login')
 def detalhes(request, id):
     produto = Produto.objects.get(id=id)
     return render(request, 'paginas/detalhes.html', {'produto':produto})
 
+@login_required(login_url='login')
 def entradas(request, id):
     t_entrada = Movimento.objects.all().filter(
         entrada=True
@@ -127,6 +132,7 @@ def entradas(request, id):
             produto.save()
             return redirect('home')
 
+@login_required(login_url='login')
 def saidas(request, id):
     t_entrada = Movimento.objects.all().filter(
         entrada=False
@@ -176,6 +182,7 @@ def saidas(request, id):
             produto.save()
             return redirect('home')
 
+@login_required(login_url='login')
 def relatorio(request, id):
     produto = Produto.objects.get(id=id)
     historico = Historico.objects.all().filter(
@@ -192,6 +199,7 @@ def relatorio(request, id):
     print(teste)
     return render(request, 'paginas/relatorios.html', {'produto':produto, 'historico':historico, 'total':total, 'teste':teste})
 
+@login_required(login_url='login')
 def alterar(request, id):
     produto = Produto.objects.get(id=id)
     produto.preco_venda = str(produto.preco_venda)
@@ -217,6 +225,7 @@ def alterar(request, id):
             messages.add_message(request, messages.SUCCESS, 'Produto alterado com sucesso.')
             return redirect('home')
 
+@login_required(login_url='login')
 def desligar_produto(request, id):
     produto = Produto.objects.get(id=id)
     produto.ativo = False
@@ -224,10 +233,11 @@ def desligar_produto(request, id):
     messages.add_message(request, messages.SUCCESS, 'Produto desligado com sucesso.')
     return redirect('home')
 
-
+@login_required(login_url='login')
 def cadastros(request):
     return render(request, 'paginas/cadastros.html')
 
+@login_required(login_url='login')
 def adicionar_categoria(request):
     categorias = Categoria.objects.all()
     paginator = Paginator(categorias, 6)
@@ -245,6 +255,7 @@ def adicionar_categoria(request):
             item.save()
             return redirect('adicionar_categoria')
 
+@login_required(login_url='login')
 def alterar_categoria(request, id):
     categoria = Categoria.objects.get(id=id)
     if request.method != 'POST':
@@ -259,6 +270,7 @@ def alterar_categoria(request, id):
             categoria.save()
             return redirect('adicionar_categoria')
 
+@login_required(login_url='login')
 def adicionar_medida(request):
     medidas = Medidas.objects.all()
     paginator = Paginator(medidas, 6)
@@ -276,6 +288,7 @@ def adicionar_medida(request):
             item.save()
             return redirect('adicionar_medida')
 
+@login_required(login_url='login')
 def alterar_medida(request, id):
     medida = Medidas.objects.get(id=id)
     if request.method != 'POST':
@@ -290,6 +303,7 @@ def alterar_medida(request, id):
             medida.save()
             return redirect('adicionar_medida')
 
+@login_required(login_url='login')
 def adicionar_movimento(request):
     mov = Movimento.objects.all().order_by('tipo_movimento')
     paginator = Paginator(mov, 8)
@@ -326,7 +340,8 @@ def adicionar_movimento(request):
             item.save()
             messages.add_message(request, messages.SUCCESS, 'Movimento cadastrado com sucesso')
             return redirect('adicionar_movimento')
-        
+
+@login_required(login_url='login')        
 def eliminar_historico(request, id):
     historico = Historico.objects.get(id=id)
     produto = Produto.objects.get(id=historico.produto.id)
@@ -341,3 +356,35 @@ def eliminar_historico(request, id):
     historico.save()
     messages.add_message(request, messages.INFO, 'Movimento eliminado com sucesso')
     return redirect('relatorio', produto.id)
+
+@login_required(login_url='login')
+def pouco_estoque(request, quant):
+    quant = request.GET.get('quant')
+    if quant == None:
+        quant=0
+    else:
+        quant = int(quant)
+    produtos = Produto.objects.all().order_by('estoque').filter(
+        ativo=True
+    )
+    paginator = Paginator(produtos, 5)
+    page = request.GET.get('p')
+    produtos = paginator.get_page(page)
+    print(quant)
+    return render(request, 'paginas/pouco_estoque.html', {'produtos':produtos, 'quant':quant})
+
+@login_required(login_url='login')
+def por_categoria(request):
+    categorias = Categoria.objects.order_by('categoria').filter(produto__ativo=True).annotate( n=Count('produto'))
+    paginator = Paginator(categorias, 6)
+    page = request.GET.get('p')
+    categorias = paginator.get_page(page)
+    return render(request, 'paginas/por_categoria.html', {'categorias':categorias})
+
+@login_required(login_url='login')
+def produto_por_categoria(request, id):
+    categoria = Categoria.objects.get(id=id)
+    produtos = Produto.objects.all().filter(
+        ativo=True, categoria=categoria
+    )
+    return render(request, 'paginas/produto_categoria.html', {'produtos':produtos, 'categoria':categoria})

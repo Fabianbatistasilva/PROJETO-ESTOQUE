@@ -1,0 +1,59 @@
+{% extends 'base.html'%}
+
+{%block 'titulo'%}
+Consultas por categoria
+{%endblock%}
+
+
+{%block 'conteudo'%}
+{% include 'parciais/_messages.html'%}
+<h1 class="text-center my-5">Consulta de produtos por categoria</h1>
+<div class="row">
+  <div class="col-3"></div>
+  <div class="col-lg-6">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Id</th>
+          <th scope="col">Categoria</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for c in categorias%}
+        <tr>
+            <td>{{c.id}}</td>
+            <td>{{c.categoria}}</td>
+            <td><a href="{% url 'produto_por_categoria' c.id%}" class="btn btn-primary">Ver produtos ({{c.n}})</a></td>
+        </tr>
+        {%endfor%}
+      </tbody>
+    </table>
+    
+    <nav aria-label="Page navigation example">
+      <ul class="pagination justify-content-center">
+        {%if categorias.has_previous%}
+        <li class="page-item">
+          <a class="page-link" href="?p={{categorias.previous_page_number}}">Anterior</a>
+        </li>
+        {%endif%}
+        {%for pagina in categorias.paginator.page_range%}
+        {%if categorias.number == pagina%}
+          <li class="page-item active"><a class="page-link bg-success" href="?p={{pagina}}">{{pagina}}</a></li>
+        {% else %}
+          <li class="page-item"><a class="page-link" href="?p={{pagina}}">{{pagina}}</a></li>
+        {%endif%}
+        {%endfor%}
+        {%if categorias.has_next%}
+        <li class="page-item">
+          <a class="page-link" href="?p={{categorias.next_page_number}}">Próxima</a>
+        </li>
+        {%endif%}
+      </ul>
+    </nav>
+  </div>
+  <div class="col-3"></div>
+</div>
+
+
+    
+{%endblock%}

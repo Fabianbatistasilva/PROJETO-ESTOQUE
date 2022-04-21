@@ -49,10 +49,14 @@ Alteração de produtos
 
       <div class="mb-3">
         <div>
+          {% if produto.foto %}
           {{produto.foto.url}}
+          {%else%}
+          <span>Produto sem foto</span>
+          {% endif %}
         </div>
         <label class="form-label">Foto: </label>
-        <input type="file" name="foto" accept="image/*" id="id_foto" value="{{produto.foto.url}}" class="form-control">
+        <input type="file" name="foto" accept="image/*" id="id_foto" value="" class="form-control">
       </div>
       <button type="submit" class="btn btn-primary">Alterar produto</button>
     </form>
