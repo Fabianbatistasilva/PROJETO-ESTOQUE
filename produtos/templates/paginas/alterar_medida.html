@@ -1,0 +1,25 @@
+{% extends 'base.html'%}
+
+{%block 'titulo'%}
+Manutenção de medidas
+{%endblock%}
+
+
+{%block 'conteudo'%}
+{% include 'parciais/_messages.html'%}
+<h1 class="text-center my-5">Manutenção de medidas</h1>
+
+ 
+
+    <form method="post" action="{% url 'alterar_medida' medida.id%}" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="mb-3">
+        <label class="form-label">Nova medida: </label>
+        <input type="text" class="form-control" name="medida" placeholder="" value="{{medida.descricao}}">
+      </div>
+      <button type="submit" class="btn btn-primary">Alterar medida</button>
+    </form>
+
+
+    
+{%endblock%}

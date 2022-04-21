@@ -11,7 +11,7 @@ class AdmProduto(admin.ModelAdmin):
     list_filter = ['categoria']
 
 class AdmHistorico(admin.ModelAdmin):
-    list_display = ('id', 'data', 'movimentacao', 'produto', 'quantidade', 'preco',)
+    list_display = ('id', 'data', 'movimentacao', 'produto', 'quantidade', 'preco', 'excluido')
     list_display_links = ('id', 'data',)
     list_per_page = 10
     list_filter = ['movimentacao']

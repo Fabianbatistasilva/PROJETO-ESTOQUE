@@ -1,0 +1,145 @@
+{% extends 'base.html'%}
+
+{%block 'titulo'%}
+Tipos de movimentação
+{%endblock%}
+
+
+{%block 'conteudo'%}
+{% include 'parciais/_messages.html'%}
+<h1 class="text-center my-5">Cadastro de Tipos de movimentação</h1>
+<div class="row">
+  <div class="col-lg-7">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Id</th>
+          <th scope="col">Descricao</th>
+          <th scope="col">Tipo</th>
+          <th scope="col">Operação</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for c in mov%}
+        <tr>
+            <td>{{c.id}}</td>
+            <td>{{c.tipo_movimento}}</td>
+            {% if c.entrada %}
+            <td>Entrada</td>
+            {% else %}
+            <td>Saída</td>
+            {%endif%}
+            {% if c.somente_contabil%}
+            <td>Operação contabil</td>
+            {% else %}
+            <td>Operação comercial</td>
+            {%endif%}
+        </tr>
+        {%endfor%}
+      </tbody>
+    </table>
+    
+    <nav aria-label="Page navigation example">
+      <ul class="pagination justify-content-center">
+        {%if mov.has_previous%}
+        <li class="page-item">
+          <a class="page-link" href="?p={{mov.previous_page_number}}">Anterior</a>
+        </li>
+        {%endif%}
+        {%for pagina in mov.paginator.page_range%}
+        {%if mov.number == pagina%}
+          <li class="page-item active"><a class="page-link bg-success" href="?p={{pagina}}">{{pagina}}</a></li>
+        {% else %}
+          <li class="page-item"><a class="page-link" href="?p={{pagina}}">{{pagina}}</a></li>
+        {%endif%}
+        {%endfor%}
+        {%if mov.has_next%}
+        <li class="page-item">
+          <a class="page-link" href="?p={{mov.next_page_number}}">Próxima</a>
+        </li>
+        {%endif%}
+      </ul>
+    </nav>
+  </div>
+  
+  <div class="col-lg-5">
+
+    <form method="post" action="{% url 'adicionar_movimento' %}" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="mb-3">
+        <label class="form-label">Novo movimento: </label>
+        <input type="text" class="form-control" name="movimento" placeholder="Descrição" value="{{request.POST.movimento}}">
+      </div>
+
+      <div style="border: 1px solid grey;" class="my-3 py-2 px-2">
+        <h5>Tipo de movimento</h5>
+        {%if request.POST.tipo == 'entrada'%}
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="tipo" id="entrada" value="entrada" checked>
+          <label class="form-check-label" for="entrada">Entrada</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="tipo" id="saida" value="saida">
+          <label class="form-check-label" for="saida">Saída</label>
+        </div>
+        {%elif request.POST.tipo == 'saida'%}
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="tipo" id="entrada" value="entrada">
+          <label class="form-check-label" for="entrada">Entrada</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="tipo" id="saida" value="saida" checked>
+          <label class="form-check-label" for="saida">Saída</label>
+        </div>
+        {% else %}
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="tipo" id="entrada" value="entrada">
+          <label class="form-check-label" for="entrada">Entrada</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="tipo" id="saida" value="saida">
+          <label class="form-check-label" for="saida">Saída</label>
+        </div>
+        {%endif%}
+      </div>
+
+      <div style="border: 1px solid grey;" class="my-3 py-2 px-2">
+        <h5>Tipo de operação</h5>
+        {%if request.POST.operacao == 'comercial'%}
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="operacao" id="comercial" value="comercial" checked>
+          <label class="form-check-label" for="comercial">Operação comercial</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="operacao" id="contabil" value="contabil">
+          <label class="form-check-label" for="contabil">Operação contabil</label>
+        </div>
+        {%elif request.POST.operacao == 'contabil'%}
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="operacao" id="comercial" value="comercial">
+          <label class="form-check-label" for="comercial">Operação comercial</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="operacao" id="contabil" value="contabil" checked>
+          <label class="form-check-label" for="contabil">Operação contabil</label>
+        </div>
+        {% else %}
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="operacao" id="comercial" value="comercial">
+          <label class="form-check-label" for="comercial">Operação comercial</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="operacao" id="contabil" value="contabil">
+          <label class="form-check-label" for="contabil">Operação contabil</label>
+        </div>
+        {%endif%}
+      </div>
+      <button type="submit" class="btn btn-primary">Adicionar tipo de movimentação</button>
+    </form>
+
+  </div>
+</div>
+
+
+    
+{%endblock%}

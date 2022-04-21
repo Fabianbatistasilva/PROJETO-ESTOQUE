@@ -1,0 +1,70 @@
+{% extends 'base.html'%}
+
+{%block 'titulo'%}
+Cadastro de medidas
+{%endblock%}
+
+
+{%block 'conteudo'%}
+{% include 'parciais/_messages.html'%}
+<h1 class="text-center my-5">Cadastro de Medidas</h1>
+<div class="row">
+  <div class="col-lg-6">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Id</th>
+          <th scope="col">Medida</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for c in medidas%}
+        <tr>
+            <td>{{c.id}}</td>
+            <td>{{c.descricao}}</td>
+            <td><a href="{% url 'alterar_medida' c.id%}" class="btn btn-primary">Alterar medida</a></td>
+        </tr>
+        {%endfor%}
+      </tbody>
+    </table>
+    
+    <nav aria-label="Page navigation example">
+      <ul class="pagination justify-content-center">
+        {%if medidas.has_previous%}
+        <li class="page-item">
+          <a class="page-link" href="?p={{medidas.previous_page_number}}">Anterior</a>
+        </li>
+        {%endif%}
+        {%for pagina in medidas.paginator.page_range%}
+        {%if medidas.number == pagina%}
+          <li class="page-item active"><a class="page-link bg-success" href="?p={{pagina}}">{{pagina}}</a></li>
+        {% else %}
+          <li class="page-item"><a class="page-link" href="?p={{pagina}}">{{pagina}}</a></li>
+        {%endif%}
+        {%endfor%}
+        {%if medidas.has_next%}
+        <li class="page-item">
+          <a class="page-link" href="?p={{medidas.next_page_number}}">Próxima</a>
+        </li>
+        {%endif%}
+      </ul>
+    </nav>
+  </div>
+  
+  <div class="col-lg-6">
+
+    <form method="post" action="{% url 'adicionar_medida' %}" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="mb-3">
+        <label class="form-label">Nova medida: </label>
+        <input type="text" class="form-control" name="medida" placeholder="Nova medida" value="{{request.POST.medida}}">
+      </div>
+      <button type="submit" class="btn btn-primary">Adicionar medida</button>
+    </form>
+
+  </div>
+</div>
+
+
+    
+{%endblock%}

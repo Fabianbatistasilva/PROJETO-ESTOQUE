@@ -51,6 +51,7 @@
                 <a href="{% url 'alterar' produto.id%}" class="btn btn-warning my-3" style="width: 230px;">Alterar produto</a>
                 {% if produto.estoque > 0%}
                 <a href="" class="btn btn-danger my-3 disabled" style="width: 230px;">Desativar produto</a>
+                <small><b>** Para desativar um produto o estoque precisa estar zerado</b></small>
                 {% else %}
                 <a href="{% url 'desligar' produto.id%}" class="btn btn-danger my-3" style="width: 230px;">Desativar produto</a>
                 {% endif %}

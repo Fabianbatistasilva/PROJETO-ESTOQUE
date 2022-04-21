@@ -1,0 +1,25 @@
+{% extends 'base.html'%}
+
+{%block 'titulo'%}
+Manutenção de categorias
+{%endblock%}
+
+
+{%block 'conteudo'%}
+{% include 'parciais/_messages.html'%}
+<h1 class="text-center my-5">Manutenção de categorias</h1>
+
+ 
+
+    <form method="post" action="{% url 'alterar_categoria' categoria.id%}" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="mb-3">
+        <label class="form-label">Nova categoria: </label>
+        <input type="text" class="form-control" name="categoria" placeholder="" value="{{categoria.categoria}}">
+      </div>
+      <button type="submit" class="btn btn-primary">Alterar categoria</button>
+    </form>
+
+
+    
+{%endblock%}

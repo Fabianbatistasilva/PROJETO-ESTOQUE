@@ -42,4 +42,4 @@ class Historico(models.Model):
     produto = models.ForeignKey(Produto, on_delete=models.DO_NOTHING)
     quantidade = models.IntegerField()
     preco = models.DecimalField(max_digits=7, decimal_places=2)
-
+    excluido = models.BooleanField(default=False)

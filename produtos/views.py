@@ -179,7 +179,7 @@ def saidas(request, id):
 def relatorio(request, id):
     produto = Produto.objects.get(id=id)
     historico = Historico.objects.all().filter(
-        produto=produto
+        produto=produto, excluido=False
     ).order_by('-data')
     paginator = Paginator(historico, 5)
     page = request.GET.get('p')
@@ -223,3 +223,121 @@ def desligar_produto(request, id):
     produto.save()
     messages.add_message(request, messages.SUCCESS, 'Produto desligado com sucesso.')
     return redirect('home')
+
+
+def cadastros(request):
+    return render(request, 'paginas/cadastros.html')
+
+def adicionar_categoria(request):
+    categorias = Categoria.objects.all()
+    paginator = Paginator(categorias, 6)
+    page = request.GET.get('p')
+    categorias = paginator.get_page(page)
+    if request.method != 'POST':
+        return render(request, 'paginas/adicionar_categoria.html', {'categorias':categorias})
+    else:
+        categ = request.POST.get('categoria').strip().title()
+        if len(categ) < 5:
+            messages.add_message(request, messages.ERROR, 'Descrição da categoria muito curta, mínimo 5 digitos')
+            return render(request, 'paginas/adicionar_categoria.html', {'categorias':categorias})
+        else:
+            item = Categoria.objects.create(categoria=categ)
+            item.save()
+            return redirect('adicionar_categoria')
+
+def alterar_categoria(request, id):
+    categoria = Categoria.objects.get(id=id)
+    if request.method != 'POST':
+        return render(request, 'paginas/alterar_categoria.html', {'categoria':categoria})
+    else:
+        categ = request.POST.get('categoria').strip().title()
+        if len(categ) < 5:
+            messages.add_message(request, messages.ERROR, 'Descrição da categoria muito curta, mínimo 5 digitos')
+            return render(request, 'paginas/alterar_categoria.html', {'categoria':categoria})
+        else:
+            categoria.categoria = categ
+            categoria.save()
+            return redirect('adicionar_categoria')
+
+def adicionar_medida(request):
+    medidas = Medidas.objects.all()
+    paginator = Paginator(medidas, 6)
+    page = request.GET.get('p')
+    medidas = paginator.get_page(page)
+    if request.method != 'POST':
+        return render(request, 'paginas/adicionar_medida.html', {'medidas':medidas})
+    else:
+        categ = request.POST.get('medida').strip().title()
+        if len(categ) == 0:
+            messages.add_message(request, messages.ERROR, 'Descrição da medida não pode ser vazia')
+            return render(request, 'paginas/adicionar_medida.html', {'medidas':medidas})
+        else:
+            item = Medidas.objects.create(descricao=categ)
+            item.save()
+            return redirect('adicionar_medida')
+
+def alterar_medida(request, id):
+    medida = Medidas.objects.get(id=id)
+    if request.method != 'POST':
+        return render(request, 'paginas/alterar_medida.html', {'medida':medida})
+    else:
+        categ = request.POST.get('medida').strip().title()
+        if len(categ) == 0:
+            messages.add_message(request, messages.ERROR, 'Descrição da medida não pode ser vazia')
+            return render(request, 'paginas/alterar_medida.html', {'medida':medida})
+        else:
+            medida.descricao = categ
+            medida.save()
+            return redirect('adicionar_medida')
+
+def adicionar_movimento(request):
+    mov = Movimento.objects.all().order_by('tipo_movimento')
+    paginator = Paginator(mov, 8)
+    page = request.GET.get('p')
+    mov = paginator.get_page(page)
+    if request.method != 'POST':
+        return render(request, 'paginas/adicionar_movimento.html', {'mov':mov})
+    else:
+        tipo_movimento = request.POST.get('movimento').strip().title()
+        entrada = request.POST.get('tipo')
+        somente_contabil = request.POST.get('operacao')
+        if not entrada:
+            messages.add_message(request, messages.ERROR, 'Especifique se a operação é entrada ou saída')
+            return render(request, 'paginas/adicionar_movimento.html', {'mov':mov})
+        
+        if not somente_contabil:
+            messages.add_message(request, messages.ERROR, 'Especifique se a operação é de venda comercial ou somente contabil')
+            return render(request, 'paginas/adicionar_movimento.html', {'mov':mov})
+        
+        if len(tipo_movimento) < 5:
+            messages.add_message(request, messages.ERROR, 'Descrição do movimento deve ter pelo menos 5 caracteres')
+            return render(request, 'paginas/adicionar_movimento.html', {'mov':mov})
+        else:
+            if entrada == 'entrada':
+                entrada_valor = True
+            else:
+                entrada_valor = False
+
+            if somente_contabil == 'contabil':
+                contabil_valor = True
+            else:
+                contabil_valor = False
+            item = Movimento.objects.create(tipo_movimento=tipo_movimento, entrada=entrada_valor, somente_contabil=contabil_valor)
+            item.save()
+            messages.add_message(request, messages.SUCCESS, 'Movimento cadastrado com sucesso')
+            return redirect('adicionar_movimento')
+        
+def eliminar_historico(request, id):
+    historico = Historico.objects.get(id=id)
+    produto = Produto.objects.get(id=historico.produto.id)
+    historico.excluido = True
+    quant = historico.quantidade
+    tipo = historico.movimentacao.entrada
+    if tipo:
+        produto.estoque = produto.estoque - quant
+    else:
+        produto.estoque = produto.estoque + quant
+    produto.save()
+    historico.save()
+    messages.add_message(request, messages.INFO, 'Movimento eliminado com sucesso')
+    return redirect('relatorio', produto.id)

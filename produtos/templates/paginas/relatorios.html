@@ -85,7 +85,7 @@ Relatório {{produto.produto}}
               <td>{{h.quantidade}}</td>
               <td>R$ {{h.preco}}</td>
               <td class="text-end"><strong>R$ {{c}}</strong></td>
-            
+              <td> <a href="{% url 'eliminar_historico' h.id%}" class="btn btn-danger">Eliminar</a></td>
           </tr>
           {% else %}
           <tr class="text-danger">
@@ -95,6 +95,7 @@ Relatório {{produto.produto}}
               <td>- {{h.quantidade}}</td>
               <td>- R$ {{h.preco}}</td>
               <td class="text-end"><strong>- R$ {{c}}</strong></td>
+              <td> <a href="{% url 'eliminar_historico' h.id%}" class="btn btn-danger">Eliminar</a></td>
           </tr>
           {% endif %}
           {%endfor%}

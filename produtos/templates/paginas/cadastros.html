@@ -1,0 +1,62 @@
+{% extends 'base.html'%}
+{% load static %}
+{%block 'titulo'%}
+Página de cadastros
+{%endblock%}
+{% block 'conteudo' %}
+<h1 style="padding-top: 20px; margin-bottom: 100px;" class="text-center">Página de cadastros</h1>
+{% include 'parciais/_messages.html'%}
+
+
+
+<div class="row py-3">
+    
+    <div class="col-md-3 col-sm-6">
+        <div>
+            <a href="{% url 'adicionar_produto' %}"><img src="{% static 'img/icone_produtos.png'%}" style="width: 100%;"></a>
+        </div>
+
+        <div class="text-center">
+            <a href="{% url 'adicionar_produto' %}">Cadastro de produtos</a>
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-6">
+        <div>
+            <a href="{% url 'adicionar_categoria' %}"><img src="{% static 'img/icone_categorias.png'%}" style="width: 100%;"></a>
+        </div>
+
+        <div class="text-center">
+            <a href="{% url 'adicionar_categoria' %}">Cadastro de categorias</a>
+            
+        </div>
+    </div>
+
+    <div class="col-md-3 col-sm-6">
+        <div>
+            <a href="{% url 'adicionar_medida' %}"><img src="{% static 'img/icone_medidas.png'%}" style="width: 100%;"></a>
+        </div>
+
+        <div class="text-center">
+            <a href="{% url 'adicionar_medida' %}">Cadastro de medidas</a>
+            
+        </div>
+    </div>
+
+    <div class="col-md-3 col-sm-6">
+        <div>
+            <a href="{% url 'adicionar_movimento' %}"><img src="{% static 'img/icone_movimentacoes.png'%}" style="width: 100%;"></a>
+        </div>
+
+        <div class="text-center">
+            <a href="{% url 'adicionar_movimento' %}">Cadastro de tipos de movimentação</a>
+            
+        </div>
+    </div>
+    
+</div>
+<br><br><br>
+
+
+
+
+{% endblock %}
