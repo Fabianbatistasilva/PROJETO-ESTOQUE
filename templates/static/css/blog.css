@@ -186,3 +186,7 @@ footer{
     height: 60px;
     width: 100%;
 }
+
+.detalhes{
+    box-shadow: 7px 7px 4px rgb(175, 175, 175);
+}
