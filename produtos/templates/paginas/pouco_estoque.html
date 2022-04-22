@@ -35,7 +35,6 @@ Consulta estoque
         </thead>
         <tbody>
           {% for p in produtos%}
-          {% if p.estoque <= quant %}
           <tr>
               <td><a href="{% url 'detalhes' p.id %}">{{p.id}}</a></td>
               <td><a href="{% url 'detalhes' p.id %}">{{p.produto}}</a></td>
@@ -49,7 +48,6 @@ Consulta estoque
               {% endif %}
               <td><a href="{% url 'relatorio' p.id %}" class="btn btn-info">Relatório</a></td>
           </tr>
-          {%endif%}
           {%endfor%}
         </tbody>
       </table>
