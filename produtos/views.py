@@ -366,7 +366,7 @@ def pouco_estoque(request, quant):
         quant = int(quant)
     produtos = Produto.objects.all().order_by('estoque').filter(
         ativo=True
-    )
+    ).exclude(estoque__gt=quant)
     paginator = Paginator(produtos, 5)
     page = request.GET.get('p')
     produtos = paginator.get_page(page)
