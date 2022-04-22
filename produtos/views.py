@@ -369,6 +369,21 @@ def pouco_estoque(request, quant):
     return render(request, 'paginas/pouco_estoque.html', {'produtos':produtos, 'quant':quant})
 
 @login_required(login_url='login')
+def muito_estoque(request, quant):
+    quant = request.GET.get('quant')
+    if quant == None:
+        quant=10
+    else:
+        quant = int(quant)
+    produtos = Produto.objects.all().order_by('-estoque').filter(
+        ativo=True, estoque__gt=quant-1
+    )
+    paginator = Paginator(produtos, 5)
+    page = request.GET.get('p')
+    produtos = paginator.get_page(page)
+    return render(request, 'paginas/muito_estoque.html', {'produtos':produtos, 'quant':quant})
+
+@login_required(login_url='login')
 def por_categoria(request):
     categorias = Categoria.objects.order_by('categoria').filter(produto__ativo=True).annotate( n=Count('produto'))
     paginator = Paginator(categorias, 6)
@@ -382,4 +397,7 @@ def produto_por_categoria(request, id):
     produtos = Produto.objects.all().filter(
         ativo=True, categoria=categoria
     )
+    paginator = Paginator(produtos, 6)
+    page = request.GET.get('p')
+    produtos = paginator.get_page(page)
     return render(request, 'paginas/produto_categoria.html', {'produtos':produtos, 'categoria':categoria})

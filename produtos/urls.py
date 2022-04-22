@@ -21,6 +21,7 @@ urlpatterns = [
     path('adicionar_movimento/', views.adicionar_movimento, name='adicionar_movimento'),
     path('eliminar_historico/<int:id>', views.eliminar_historico, name='eliminar_historico'),
     path('pouco_estoque/<int:quant>', views.pouco_estoque, name='pouco_estoque'),
+    path('muito_estoque/<int:quant>', views.muito_estoque, name='muito_estoque'),
     path('por_categoria/', views.por_categoria, name='por_categoria'),
     path('produto_por_categoria/<int:id>', views.produto_por_categoria, name='produto_por_categoria'),
 ]

@@ -1,26 +1,23 @@
 {% extends 'base.html'%}
 {% load static%}
 {%block 'titulo'%}
-Home
+Consulta estoque
 {%endblock%}
 
 {%block 'conteudo'%}
     {% include 'parciais/_messages.html'%}
     <div class="row">
-      <div class="col-3">
-        <a href="{% url 'adicionar_produto'%}" class="btn btn-primary text-light my-4">Adicionar produto  <span class="fs-4 px-2">+</span></a>
+      <div class="col-5">
+        <form method="get" action="{% url 'muito_estoque' quant%}">
+          <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Acima de quantos itens no estoque deseja listar? </label>
+            <input type="number" class="form-control" name="quant" step="1" min="0" value="{{quant}}">
+          </div>
+          <button type="submit" class="btn btn-primary">Consultar</button>
+        </form>
       </div>
       
-      <div class="col-3">
-        <a href="{% url 'cadastros'%}" class="btn btn-primary text-light my-4">Mais cadastros  <span class="fs-4 px-2">+</span></a>
-      </div>
-      <div class="col-3">
-        <a href="{% url 'por_categoria'%}" class="btn btn-primary text-light my-4"><span class="fs-4 px-2">-</span></span>Por categoria <span class="fs-4 px-2">-</span></span></a>
-      </div>
-      <div class="col-3">
-        <a href="{% url 'pouco_estoque' 0%}" class="btn btn-warning my-1">Listar itens com pouco estoque</a>
-        <a href="{% url 'muito_estoque' 0%}" class="btn btn-secondary my-1">Listar itens com muito estoque</a>
-      </div>
+      
       
       
       
@@ -49,7 +46,7 @@ Home
               {% else %}
               <td>Nenhuma compra realizada</td>
               {% endif %}
-              <td><a href="{% url 'relatorio' p.id %}" class="btn btn-info text-light">Relatório</a></td>
+              <td><a href="{% url 'relatorio' p.id %}" class="btn btn-info">Relatório</a></td>
           </tr>
           {%endfor%}
         </tbody>
@@ -59,19 +56,19 @@ Home
         <ul class="pagination justify-content-center">
           {%if produtos.has_previous%}
           <li class="page-item">
-            <a class="page-link" href="?p={{produtos.previous_page_number}}">Anterior</a>
+            <a class="page-link" href="?p={{produtos.previous_page_number}}&quant={{quant}}">Anterior</a>
           </li>
           {%endif%}
           {%for pagina in produtos.paginator.page_range%}
           {%if produtos.number == pagina%}
-            <li class="page-item active"><a class="page-link bg-success" href="?p={{pagina}}">{{pagina}}</a></li>
+            <li class="page-item active"><a class="page-link bg-success" href="?p={{pagina}}&quant={{quant}}">{{pagina}}</a></li>
           {% else %}
-            <li class="page-item"><a class="page-link" href="?p={{pagina}}">{{pagina}}</a></li>
+            <li class="page-item"><a class="page-link" href="?p={{pagina}}&quant={{quant}}">{{pagina}}</a></li>
           {%endif%}
           {%endfor%}
           {%if produtos.has_next%}
           <li class="page-item">
-            <a class="page-link" href="?p={{produtos.next_page_number}}">Próxima</a>
+            <a class="page-link" href="?p={{produtos.next_page_number}} &quant={{quant}}">Próxima</a>
           </li>
           {%endif%}
         </ul>
