@@ -15,11 +15,19 @@ Home
         <a href="{% url 'cadastros'%}" class="btn btn-primary text-light my-4">Mais cadastros  <span class="fs-4 px-2">+</span></a>
       </div>
       <div class="col-md-3">
-        <a href="{% url 'por_categoria'%}" class="btn btn-primary text-light my-4"><span class="fs-4 px-2">-</span></span>Por categoria <span class="fs-4 px-2">-</span></span></a>
+        
       </div>
       <div class="col-md-3">
-        <a href="{% url 'pouco_estoque' 0%}" class="btn btn-warning my-1">Listar itens com pouco estoque</a>
-        <a href="{% url 'muito_estoque' 0%}" class="btn btn-secondary my-1">Listar itens com muito estoque</a>
+        <div class="dropdown">
+          <button class="btn btn-lg btn-success dropdown-toggle my-4" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+            Mais consultas
+          </button>
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+            <li><a href="{% url 'por_categoria'%}" class="my-1 dropdown-item">Consultar itens Por categoria</a></li>
+            <li><a href="{% url 'pouco_estoque' 0%}" class="my-1 dropdown-item">Listar itens com pouco estoque</a></li>
+            <li><a href="{% url 'muito_estoque' 0%}" class="my-1 dropdown-item">Listar itens com muito estoque</a></li>
+          </ul>
+        </div>
       </div>
       
       
