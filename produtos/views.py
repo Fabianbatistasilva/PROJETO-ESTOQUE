@@ -129,7 +129,7 @@ def entradas(request, id):
                         produto.preco_ultima_compra = preco
             produto.estoque = produto.estoque + quant
             produto.save()
-            return redirect('home')
+            return redirect('relatorio', produto.id)
 
 @login_required(login_url='login')
 def saidas(request, id):
@@ -179,7 +179,7 @@ def saidas(request, id):
                         produto.data_ultima_venda = data
             produto.estoque = produto.estoque - quant
             produto.save()
-            return redirect('home')
+            return redirect('relatorio', produto.id)
 
 @login_required(login_url='login')
 def relatorio(request, id):

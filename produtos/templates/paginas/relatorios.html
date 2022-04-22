@@ -102,7 +102,7 @@ Relatório {{produto.produto}}
         </tbody>
       </table>
 
-      <nav aria-label="Page navigation example" class="mb-5">
+      <nav aria-label="Page navigation example" class="mb-1">
         <ul class="pagination justify-content-center">
           {%if historico.has_previous%}
           <li class="page-item">
@@ -123,5 +123,18 @@ Relatório {{produto.produto}}
           {%endif%}
         </ul>
       </nav>
+
+      
+      <div class="text-center">
+      
+      <a href="{% url 'entradas' produto.id%}" class="btn btn-success my-3" style="width: 230px;">Lançar entradas (compras)</a>
+      {% if produto.estoque > 0 %}
+      <a href="{% url 'saidas' produto.id%}" class="btn btn-success my-3" style="width: 230px;">Lançar saídas (vendas)</a>
+      {% else %}
+      <a href="" class="btn btn-success disabled my-3" style="width: 230px;">Lançar saídas (vendas)</a>
+      {% endif %}
+
+      </div>
+
       <br><br>
 {%endblock%}
