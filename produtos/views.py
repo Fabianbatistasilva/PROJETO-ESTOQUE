@@ -68,7 +68,6 @@ def adicionar_produto(request):
         categ = Categoria.objects.get(id=request.POST.get('categorias'))
         medida = Medidas.objects.get(id=request.POST.get('medidas'))
         foto = request.FILES.get('foto')
-        print(foto)
         usuario = request.user
         if len(produto) < 5:
             messages.add_message(request, messages.ERROR, 'Descrição do produto muito curta, mínimo 5 digitos')
@@ -194,9 +193,7 @@ def relatorio(request, id):
     total = []
     for c in historico:
         total.append(c.preco*c.quantidade)
-    print(total)
     teste = zip(historico, total)
-    print(teste)
     return render(request, 'paginas/relatorios.html', {'produto':produto, 'historico':historico, 'total':total, 'teste':teste})
 
 @login_required(login_url='login')
@@ -214,7 +211,6 @@ def alterar(request, id):
         produto.categoria = Categoria.objects.get(id=request.POST.get('categorias'))
         produto.medida = Medidas.objects.get(id=request.POST.get('medidas'))
         foto = request.FILES.get('foto')
-        print(foto)
         if foto:
             produto.foto = foto
         if len(produto.produto) < 5:
@@ -370,7 +366,6 @@ def pouco_estoque(request, quant):
     paginator = Paginator(produtos, 5)
     page = request.GET.get('p')
     produtos = paginator.get_page(page)
-    print(quant)
     return render(request, 'paginas/pouco_estoque.html', {'produtos':produtos, 'quant':quant})
 
 @login_required(login_url='login')

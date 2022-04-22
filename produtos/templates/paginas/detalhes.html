@@ -10,11 +10,11 @@
       <div class="col"></div>
 
       <div style="margin: 0 auto;" class="col-10">
-        <div class="card mb-3 detalhes" style="max-width: 800px;">
+        <div class="card mb-3 detalhes" style="max-width: 100%;">
           <div class="row">
             <div class="col-md-4">
               {% if produto.foto %}
-              <img src="{{produto.foto.url}}" class="img-fluid rounded-start" alt="..." style="width: 80%;">
+              <img src="{{produto.foto.url}}" class="img-fluid rounded mx-auto my-5 d-block" alt="..." style="width: 80%;">
               {% else %}
               <img src="{% static 'img/sem_foto1.jpeg' %}" class="img-fluid rounded-start" alt="..." style="width: 80%;">
               {% endif %}
