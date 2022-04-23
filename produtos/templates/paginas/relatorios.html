@@ -58,9 +58,15 @@ Relatório {{produto.produto}}
       </div>
       {% endif %}
     </div>
-
-    <h1 class="text-center text-secondary">Histórico de movimentação</h1>
-
+    <div class="row">
+      <div class="col-9">
+        <h1 class="text-center text-secondary">Histórico de movimentação</h1>
+      </div>
+      <div class="col-3">
+        <a href="{% url 'financeiro' produto.id%}" class="btn btn-success text-end">Relatório financeiro</a>
+      </div>
+    </div>
+    
     <table class="table table-hover">
         <thead>
           <tr>
@@ -85,8 +91,31 @@ Relatório {{produto.produto}}
               <td>{{h.quantidade}}</td>
               <td>R$ {{h.preco}}</td>
               <td class="text-end"><strong>R$ {{c}}</strong></td>
-              <td> <a href="{% url 'eliminar_historico' h.id%}" class="btn btn-warning">Eliminar</a></td>
+              <td> <a class="btn btn-warning" data-toggle="modal" data-target="#myModal{{h.id}}">Eliminar</a></td>
           </tr>
+                        <!-- Modal Eliminação -->
+    <div id="myModal{{h.id}}" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+    
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title text-danger">Eliminar registro do histórioco</h4>
+          </div>
+          <div class="modal-body">
+              <div class="mb-3">
+                <p>ATENÇÃO! deseja realmente eliminar esse registro no histórico do produto?</p>
+              </div>
+          </div>
+          <div class="modal-footer">
+            <a class="btn btn-danger" href="{% url 'eliminar_historico' h.id%}">Eliminar registro</a>
+            <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+          </div>
+        </div>
+      
+      </div>
+    </div>
           {% else %}
           <tr class="text-danger">
               <td>{{h.data}}</td>
@@ -95,15 +124,38 @@ Relatório {{produto.produto}}
               <td>- {{h.quantidade}}</td>
               <td>- R$ {{h.preco}}</td>
               <td class="text-end"><strong>- R$ {{c}}</strong></td>
-              <td> <a href="{% url 'eliminar_historico' h.id%}" class="btn btn-warning">Eliminar</a></td>
+              <td> <a class="btn btn-warning" data-toggle="modal" data-target="#myModal{{h.id}}">Eliminar</a></td>
           </tr>
+              <!-- Modal Eliminação -->
+    <div id="myModal{{h.id}}" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+    
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title text-danger">Eliminar registro do histórioco</h4>
+          </div>
+          <div class="modal-body">
+              <div class="mb-3">
+                <p>ATENÇÃO! deseja realmente eliminar esse registro no histórico do produto?</p>
+              </div>
+          </div>
+          <div class="modal-footer">
+            <a class="btn btn-danger" href="{% url 'eliminar_historico' h.id%}">Eliminar registro</a>
+            <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+          </div>
+        </div>
+      
+      </div>
+    </div>
           {% endif %}
           {%endfor%}
         </tbody>
       </table>
 
-      <nav aria-label="Page navigation example" class="mb-1">
-        <ul class="pagination justify-content-center">
+      <nav aria-label="Page navigation example" class="mb-1 justify-content-center text-center">
+        <ul class="pagination justify-content-center text-center">
           {%if historico.has_previous%}
           <li class="page-item">
             <a class="page-link" href="?p={{historico.previous_page_number}}">Anterior</a>
@@ -136,5 +188,9 @@ Relatório {{produto.produto}}
 
       </div>
 
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
       <br><br>
 {%endblock%}

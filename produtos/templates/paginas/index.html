@@ -57,7 +57,7 @@ Home
               {% else %}
               <td>Nenhuma compra realizada</td>
               {% endif %}
-              <td><a href="{% url 'relatorio' p.id %}" class="btn btn-info text-light">Movimentação</a></td>
+              <td><a href="{% url 'relatorio' p.id %}" title="Ver movimentação do produto"><img src="{% static 'img/lupa2.png'%}" style="max-width: 30px;"></a></td>
           </tr>
           {%endfor%}
         </tbody>

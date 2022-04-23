@@ -1,0 +1,161 @@
+{% extends 'base.html'%}
+{% load static%}
+{%block 'titulo'%}
+Relatório {{produto.produto}}
+{%endblock%}
+
+{%block 'conteudo'%}
+    {% include 'parciais/_messages.html'%}
+
+    <h1 class="text-center text-secondary">Relatório gerencial de produto</h1>
+
+    <div class="row">
+      <div class="mb-3 col-9">
+        <label class="form-label">Produto: </label>
+        <input type="text" class="form-control" name="produto" placeholder="Nome do produto" value="{{produto.produto}}" disabled>
+      </div>
+
+      <div class="mb-3 col-3">
+        <label class="form-label">Quant atual em Estoque: </label>
+        <input type="text" class="form-control" name="estoque" placeholder="Nome do produto" value="{{produto.estoque}}" disabled>
+      </div>
+    </div>
+    
+    <div class="row">
+      <div class="mb-3 col-md-3">
+        <label class="form-label">Preço de venda: </label>
+        <input type="text" class="form-control" name="preco_venda" value="R$ {{produto.preco_venda}}" disabled>
+      </div>
+      {% if produto.preco_ultima_compra %}
+      <div class="mb-3 col-md-3">
+        <label class="form-label">Preço da última compra: </label>
+        <input type="text" class="form-control" name="preco_compra" value="R$ {{produto.preco_ultima_compra}}" disabled>
+      </div>
+      {% else %}
+      <div class="mb-3 col-md-3">
+        <label class="form-label">Preço da última compra: </label>
+        <input type="text" class="form-control" name="preco_compra" value="Nenhuma compra efetuada ainda" disabled>
+      </div>
+      {% endif %}
+      {% if produto.data_ultima_compra %}
+      <div class="mb-3 col-md-3">
+        <label class="form-label">Data da última compra: </label>
+        <input type="text" class="form-control" name="data_compra" value="{{produto.data_ultima_compra}}" disabled>
+      </div>
+      {% else %}
+      <div class="mb-3 col-md-3">
+        <label class="form-label">Data da última compra: </label>
+        <input type="text" class="form-control" name="data_compra" value="Nenhuma compra efetuada ainda" disabled>
+      </div>
+      {% endif %}
+
+      {% if produto.data_ultima_venda %}
+      <div class="mb-3 col-md-3">
+        <label class="form-label">Data da última venda: </label>
+        <input type="text" class="form-control" name="data_compra" value="{{produto.data_ultima_venda}}" disabled>
+      </div>
+      {% else %}
+      <div class="mb-3 col-md-3">
+        <label class="form-label">Data da última venda: </label>
+        <input type="text" class="form-control" name="data_compra" value="Nenhuma venda efetuada ainda" disabled>
+      </div>
+      {% endif %}
+    </div>
+    <h4 class="text-center text-secondary">Operações de saída comercial do produto (VENDAS)</h4>
+    <div class="row">
+      <div class="mb-3 col-md-3">
+        <label class="form-label">Quantidade de produtos vendidos: </label>
+        <input type="text" class="form-control" name="preco_venda" value="{{total_item_sc}} {{produto.medida}}(s)" disabled>
+      </div>
+      
+      <div class="mb-3 col-md-3">
+        <label class="form-label">Total de valor das vendas do produto (FATURAMENTO): </label>
+        <input type="text" class="form-control" name="preco_compra" value="R$ {{total_valor_sc}}" disabled>
+      </div>
+      <div class="mb-3 col-md-3">
+        <label class="form-label">Preço médio de venda do produto: </label>
+        <input type="text" class="form-control" name="preco_compra" value="R$ {{preco_medio_venda}}" disabled>
+      </div>
+    </div>
+
+    <h4 class="text-center text-secondary">Operações somente de ajuste contabil do produto (SAÍDAS)</h4>
+    <div class="row">
+      <div class="mb-3 col-md-3">
+        <label class="form-label">Quantidade de produtos devolvidos/estornados: </label>
+        <input type="text" class="form-control" name="preco_venda" value="{{total_item_contabil}} {{produto.medida}}(s)" disabled>
+      </div>
+      
+      <div class="mb-3 col-md-3">
+        <label class="form-label">Total de valor contabil dos itens devolvidos/estornados: </label>
+        <input type="text" class="form-control" name="preco_compra" value="R$ {{total_valor_contabil}}" disabled>
+      </div>
+    </div>
+    
+    <h4 class="text-center text-secondary">Operações de entrada comercial do produto (COMPRAS)</h4>
+    <div class="row">
+      <div class="mb-3 col-md-3">
+        <label class="form-label">Quantidade de produtos comprados: </label>
+        <input type="text" class="form-control" name="preco_venda" value="{{total_item_ec}} {{produto.medida}}(s)" disabled>
+      </div>
+      
+      <div class="mb-3 col-md-3">
+        <label class="form-label">Total de valor das compras do produto: </label>
+        <input type="text" class="form-control" name="preco_compra" value="R$ {{total_valor_ec}}" disabled>
+      </div>
+      <div class="mb-3 col-md-3">
+        <label class="form-label">Preço médio de compra do produto: </label>
+        <input type="text" class="form-control" name="preco_compra" value="R$ {{preco_medio_compra}}" disabled>
+      </div>
+    </div>
+
+    <h4 class="text-center text-secondary">Operações somente de ajuste contabil do produto (ENTRADAS)</h4>
+    <div class="row">
+      <div class="mb-3 col-md-3">
+        <label class="form-label">Quantidade de produtos devolvidos ou com vendas canceladas: </label>
+        <input type="text" class="form-control" name="preco_venda" value="{{total_entrada_contabil}} {{produto.medida}}(s)" disabled>
+      </div>
+      
+      <div class="mb-3 col-md-3">
+        <label class="form-label">Total de valor contabil dos itens devolvidos ou com vendas canceladas: </label>
+        <input type="text" class="form-control" name="preco_compra" value="R$ {{total_entrada_valor_contabil}}" disabled>
+      </div>
+    </div>
+
+    <h4 class="text-center text-secondary">Relatório financeiro do produto</h4>
+    <div class="row">
+      <div class="mb-3 col-md-3">
+        <label class="form-label">Lucro total na venda pelo preço médio: </label>
+        <input type="text" class="form-control" name="preco_venda" value="R$ {{estimativa_lucro}}" disabled>
+      </div>
+      
+      <div class="mb-3 col-md-3">
+        <label class="form-label">Lucro médio por item na venda das <span class="text-primary"><b>{{total_item_sc}}</b></span> {{produto.medida}}(s) : </label>
+        {% if total_item_sc != 0%}
+        <input type="text" class="form-control" name="preco_compra" value="R$ {{media_lucro_item}}" disabled>
+        {% else %}
+        <input type="text" class="form-control" name="preco_compra" value="Sem registro de venda" disabled>
+        {%endif%}
+      </div>
+      <div class="mb-3 col-md-3">
+        <label class="form-label">Margem de lucro baseada no preço médio: </label>
+        <input type="text" class="form-control" name="preco_compra" value="{{margem_lucro_pm}}%" disabled>
+      </div>
+    </div>
+
+    <h4 class="text-center text-secondary">Projeções futuras</h4>
+    <div class="row">
+      <div class="mb-3 col-md-12">
+        <label class="form-label"><b>Estimativa de lucro na venda dos(as) <span class="text-primary"><b>{{produto.estoque}} {{produto.medida}}(s)</b></span> que ainda estão no estoque baseado no preço médio de venda:</b> </label>
+      </div>
+      
+      <div class="mb-3 col-md-3">
+        <label class="form-label">Estimativa de faturamento com a venda do estoque: </label>
+        <input type="text" class="form-control" name="preco_compra" value="R$ {{projecao_fat_estoque}}" disabled>
+      </div>
+      <div class="mb-3 col-md-3">
+        <label class="form-label">Estimativa de LUCRO na venda do estoque: </label>
+        <input type="text" class="form-control" name="preco_compra" value="R$ {{projecao_lucro_estoque}}" disabled>
+      </div>
+    </div>
+      
+{%endblock%}

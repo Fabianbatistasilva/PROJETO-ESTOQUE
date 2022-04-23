@@ -22,20 +22,44 @@ Cadastro de produtos
         <textarea name="informacoes" class="form-control" cols="30" rows="10">{{request.POST.informacoes}}</textarea>
       </div>
       <div class="mb-3">
-        <label class="form-label">Categoria: </label>
-        <select name="categorias" class="form-control">
-          {% for c in categorias%}
-          <option value="{{c.id}}">{{c.categoria}}</option>
-          {%endfor%}
-        </select>
+        
+        <div class="row">
+          <div class="col-4">
+            <label class="form-label">Categoria: </label>
+            <select name="categorias" class="form-control">
+              {% for c in categorias%}
+              <option value="{{c.id}}">{{c.categoria}}</option>
+              {%endfor%}
+            </select>
+          </div>
+          <div class="col-4">
+            <label class="form-label">Caso não tenha na lista, adicione por aqui: </label>
+            <button type="button" class="btn btn-success form-control" data-toggle="modal" data-target="#myModal">Adicionar categoria + </button>
+          </div>
+        </div>
+        
+        
       </div>
       <div class="mb-3">
-        <label class="form-label">Unidade de medida: </label>
-        <select name="medidas" class="form-control">
-          {% for m in medidas%}
-          <option value="{{m.id}}">{{m.descricao}}</option>
-          {%endfor%}
-        </select>
+        
+        <div class="row">
+          <div class="col-4">
+            <label class="form-label">Unidade de medida: </label>
+            <select name="medidas" class="form-control">
+              {% for m in medidas%}
+              <option value="{{m.id}}">{{m.descricao}}</option>
+              {%endfor%}
+            </select>
+          </div>
+          <div class="col-4">
+            <label class="form-label">Caso não tenha na lista, adicione por aqui: </label>
+            <button type="button" class="btn btn-success form-control" data-toggle="modal" data-target="#myModal2">Adicionar medida + </button>
+          </div>
+        </div>
+        
+        
+        
+        </a>
       </div>
 
 
@@ -47,5 +71,64 @@ Cadastro de produtos
       <button type="submit" class="btn btn-primary">Adicionar produto</button>
       </div>
     </form>
+
+    <!-- Modal Categoria -->
+<div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Adicionar categoria</h4>
+      </div>
+      <div class="modal-body">
+        <form method="post" action="{% url 'modal_categoria' %}" enctype="multipart/form-data" name="form2">
+          {% csrf_token %}
+          <div class="mb-3">
+            <label class="form-label">Nova categoria: </label>
+            <input type="text" class="form-control" name="categoria" placeholder="" value="{{categoria.categoria}}">
+          </div>
+          <button type="submit" class="btn btn-primary">Adicionar categoria</button>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+      </div>
+    </div>
+  
+  </div>
+</div>
+
+    <!-- Modal Medida -->
+    <div id="myModal2" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+    
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Adicionar medida</h4>
+          </div>
+          <div class="modal-body">
+            <form method="post" action="{% url 'modal_medida' %}" enctype="multipart/form-data" name="form3">
+              {% csrf_token %}
+              <div class="mb-3">
+                <label class="form-label">Nova unidade de medida: </label>
+                <input type="text" class="form-control" name="medida" placeholder="" value="{{request.POST.medida}}">
+              </div>
+              <button type="submit" class="btn btn-primary">Adicionar nova medida</button>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+          </div>
+        </div>
+      
+      </div>
+    </div>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <br><br><br>
 {%endblock%}
