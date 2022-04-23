@@ -55,7 +55,8 @@
                 {% else %}
                 <a href="{% url 'desligar' produto.id%}" class="btn btn-danger my-3" style="width: 230px;">Desativar produto</a>
                 {% endif %}
-                <a href="{% url 'relatorio' produto.id%}" class="btn btn-info">Acessar relatório do produto</a>
+                <a href="{% url 'relatorio' produto.id%}" class="btn btn-info" style="width: 230px;">Acessar relatório do produto</a>
+                <a href="{% url 'financeiro' produto.id%}" class="btn btn-info" style="width: 230px;">Dashboard financeiro do produto</a>
               </div>
             </div>
           </div>
