@@ -45,16 +45,12 @@ def cadastro(request):
         messages.add_message(request, messages.ERROR, 'ERRO! senhas não conferem')
         return render(request, 'paginas/cadastro.html')
 
-    if len(senha) < 6:
-        messages.add_message(request, messages.ERROR, 'ERRO! senha deve ter mais de 6 caracteres')
+    if len(senha) < 8:
+        messages.add_message(request, messages.ERROR, 'ERRO! senha deve ter mais de 8 caracteres')
         return render(request, 'paginas/cadastro.html')
 
-    if len(senha) > 12:
-        messages.add_message(request, messages.ERROR, 'ERRO! senha deve ter menos de 12 caracteres')
-        return render(request, 'paginas/cadastro.html')
-
-    if not senha.isalnum():
-        messages.add_message(request, messages.ERROR, 'ERRO! senha não pode ter caracteres especiais, exemplo: (#@%$/*+-!&[}{]:;.), apenas alfanuméricos')
+    if senha.isnumeric():
+        messages.add_message(request, messages.ERROR, 'ERRO! senha não pode ser somente numérica')
         return render(request, 'paginas/cadastro.html')
 
     if User.objects.filter(username=usuario).exists():
@@ -495,7 +491,7 @@ def produto_por_categoria(request, id):
     categoria = Categoria.objects.get(id=id)
     produtos = Produto.objects.all().filter(
         ativo=True, categoria=categoria, usuario=user
-    )
+    ).order_by('produto')
     paginator = Paginator(produtos, 6)
     page = request.GET.get('p')
     produtos = paginator.get_page(page)

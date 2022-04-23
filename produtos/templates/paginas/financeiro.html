@@ -61,6 +61,7 @@ Relatório {{produto.produto}}
       </div>
       {% endif %}
     </div>
+    <hr>
     <h4 class="text-center text-secondary">Operações de saída comercial do produto (VENDAS)</h4>
     <div class="row">
       <div class="mb-3 col-md-3">
@@ -77,7 +78,7 @@ Relatório {{produto.produto}}
         <input type="text" class="form-control" name="preco_compra" value="R$ {{preco_medio_venda}}" disabled>
       </div>
     </div>
-
+    
     <h4 class="text-center text-secondary">Operações somente de ajuste contabil do produto (SAÍDAS)</h4>
     <div class="row">
       <div class="mb-3 col-md-3">
@@ -90,7 +91,7 @@ Relatório {{produto.produto}}
         <input type="text" class="form-control" name="preco_compra" value="R$ {{total_valor_contabil}}" disabled>
       </div>
     </div>
-    
+    <hr>
     <h4 class="text-center text-secondary">Operações de entrada comercial do produto (COMPRAS)</h4>
     <div class="row">
       <div class="mb-3 col-md-3">
@@ -120,7 +121,7 @@ Relatório {{produto.produto}}
         <input type="text" class="form-control" name="preco_compra" value="R$ {{total_entrada_valor_contabil}}" disabled>
       </div>
     </div>
-
+    <hr><hr>
     <h4 class="text-center text-secondary">Relatório financeiro do produto</h4>
     <div class="row">
       <div class="mb-3 col-md-3">
@@ -141,7 +142,7 @@ Relatório {{produto.produto}}
         <input type="text" class="form-control" name="preco_compra" value="{{margem_lucro_pm}}%" disabled>
       </div>
     </div>
-
+    <hr><hr>
     <h4 class="text-center text-secondary">Projeções futuras</h4>
     <div class="row">
       <div class="mb-3 col-md-12">
