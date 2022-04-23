@@ -7,8 +7,9 @@ from .models import Categoria, Historico, Medidas, Movimento, Produto
 from django.utils import timezone
 from datetime import datetime
 from django.core.paginator import Paginator
-from django.db.models import Count, Sum
+from django.db.models import Count
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 # Create your views here.
 
 def login(request):
@@ -26,6 +27,48 @@ def login(request):
         auth.login(request, user)
         messages.add_message(request, messages.SUCCESS, f'Login feito com sucesso!')
         return redirect('home')
+
+def cadastro(request):
+    if request.method != 'POST':
+        return render(request, 'paginas/cadastro.html')
+    nome = request.POST.get('nome')
+    sobrenome = request.POST.get('sobrenome')
+    email = request.POST.get('email')
+    usuario = request.POST.get('usuario')
+    senha = request.POST.get('senha')
+    senha2 = request.POST.get('senha2')
+    if not nome or not sobrenome or not email or not usuario or not senha or not senha2:
+        messages.add_message(request, messages.ERROR, 'ERRO! nenhum campo pode ficar vazio')
+        return render(request, 'paginas/cadastro.html')
+    
+    if senha != senha2:
+        messages.add_message(request, messages.ERROR, 'ERRO! senhas não conferem')
+        return render(request, 'paginas/cadastro.html')
+
+    if len(senha) < 6:
+        messages.add_message(request, messages.ERROR, 'ERRO! senha deve ter mais de 6 caracteres')
+        return render(request, 'paginas/cadastro.html')
+
+    if len(senha) > 12:
+        messages.add_message(request, messages.ERROR, 'ERRO! senha deve ter menos de 12 caracteres')
+        return render(request, 'paginas/cadastro.html')
+
+    if not senha.isalnum():
+        messages.add_message(request, messages.ERROR, 'ERRO! senha não pode ter caracteres especiais, exemplo: (#@%$/*+-!&[}{]:;.), apenas alfanuméricos')
+        return render(request, 'paginas/cadastro.html')
+
+    if User.objects.filter(username=usuario).exists():
+        messages.add_message(request, messages.ERROR, f'ERRO! Usuário {usuario} já existe')
+        return render(request, 'paginas/cadastro.html')
+
+    if User.objects.filter(email=email).exists():
+        messages.add_message(request, messages.ERROR, f'ERRO! Email {email} já existe')
+        return render(request, 'paginas/cadastro.html')
+    else:
+        user = User.objects.create_user(username=usuario, email=email,  password=senha, first_name=nome, last_name=sobrenome)
+        user.save()
+        messages.add_message(request, messages.SUCCESS, f'Cadastro de {usuario} feito com sucesso, faça seu login')
+        return redirect('login')
 
 def logout(request):
     auth.logout(request)
