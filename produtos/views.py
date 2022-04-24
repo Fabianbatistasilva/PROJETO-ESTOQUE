@@ -110,6 +110,9 @@ def adicionar_produto(request):
         medida = Medidas.objects.get(id=request.POST.get('medidas'))
         foto = request.FILES.get('foto')
         usuario = request.user
+        if not preco:
+            messages.add_message(request, messages.ERROR, 'Digite um preço de venda para este produto')
+            return render(request, 'paginas/adicionar_produto.html', {'categorias':categorias, 'medidas':medidas})
         if len(produto) < 5:
             messages.add_message(request, messages.ERROR, 'Descrição do produto muito curta, mínimo 5 digitos')
             return render(request, 'paginas/adicionar_produto.html', {'categorias':categorias, 'medidas':medidas})
