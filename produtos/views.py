@@ -97,6 +97,29 @@ def index(request):
     return render(request, 'paginas/index.html', {'produtos':produtos})
 
 @login_required(login_url='login')
+def pesquisa(request):
+    termo = request.GET.get('termo')
+    if not termo:
+        termo = ''
+        user = request.user
+        produtos = Produto.objects.all().filter(
+            ativo=True, usuario=user
+        ).order_by('-id')
+        paginator = Paginator(produtos, 5)
+        page = request.GET.get('p')
+        produtos = paginator.get_page(page)
+        return render(request, 'paginas/index.html', {'produtos':produtos})
+    else:
+        user = request.user
+        produtos = Produto.objects.all().filter(
+            ativo=True, usuario=user, produto__icontains=termo
+        ).order_by('-id')
+        paginator = Paginator(produtos, 5)
+        page = request.GET.get('p')
+        produtos = paginator.get_page(page)
+        return render(request, 'paginas/index.html', {'produtos':produtos})
+
+@login_required(login_url='login')
 def adicionar_produto(request):
     categorias = Categoria.objects.all()
     medidas = Medidas.objects.all()

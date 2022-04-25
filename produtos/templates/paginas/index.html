@@ -6,6 +6,25 @@ Home
 
 {%block 'conteudo'%}
     {% include 'parciais/_messages.html'%}
+
+    <div class="input-group mb-3">
+      <form action="{% url 'pesquisa'%}" method="get">
+      <div class="row">
+        <div class="col-4"></div>
+        <div class="col-6">
+          <div class="row">
+            <div class="col-8">
+              <input type="search" class="form-control" placeholder="Pesquisa" name="termo" value="{{request.GET.termo}}" aria-label="Example text with button addon" aria-describedby="button-addon1">
+            </div>
+            <div class="col-4">
+              <button type="submit" style="border: none; background-color: aliceblue;"><i class="fas fa-glasses fa-3x fa-bounce text-success"></i></button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  
+
     <div class="row">
       <div class="col-md-3">
         <a href="{% url 'adicionar_produto'%}" class="btn btn-primary text-light my-4">Adicionar produto  <span class="fs-4 px-2">+</span></a>
@@ -67,19 +86,19 @@ Home
         <ul class="pagination justify-content-center text-center">
           {%if produtos.has_previous%}
           <li class="page-item">
-            <a class="page-link" href="?p={{produtos.previous_page_number}}">Anterior</a>
+            <a class="page-link" href="?p={{produtos.previous_page_number}}&termo={{request.GET.termo}}">Anterior</a>
           </li>
           {%endif%}
           {%for pagina in produtos.paginator.page_range%}
           {%if produtos.number == pagina%}
-            <li class="page-item active"><a class="page-link bg-success" href="?p={{pagina}}">{{pagina}}</a></li>
+            <li class="page-item active"><a class="page-link bg-success" href="?p={{pagina}}&termo={{request.GET.termo}}">{{pagina}}</a></li>
           {% else %}
-            <li class="page-item"><a class="page-link" href="?p={{pagina}}">{{pagina}}</a></li>
+            <li class="page-item"><a class="page-link" href="?p={{pagina}}&termo={{request.GET.termo}}">{{pagina}}</a></li>
           {%endif%}
           {%endfor%}
           {%if produtos.has_next%}
           <li class="page-item">
-            <a class="page-link" href="?p={{produtos.next_page_number}}">Próxima</a>
+            <a class="page-link" href="?p={{produtos.next_page_number}}&termo={{request.GET.termo}}">Próxima</a>
           </li>
           {%endif%}
         </ul>
